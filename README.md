@@ -11,7 +11,7 @@ The downstream tasks training code and configurations will be coming soon.
 
 * [Paper Introduction](#paper-introduction)
 * [Required Environment](#required-environment)
-* [Training of PointClustering](#training-of-pointclustering)
+* [Pre-Training of PointClustering on ScanNet](#pre-training-of-pointclustering-on-scannet)
 * [Citation](#citation)
 
 # Paper Introduction
