@@ -1,0 +1,94 @@
+pretrain: False
+
+trainer:
+  trainer: PointClusteringTrainer
+  save_freq_epoch: 10
+  train_phase: train
+  val_phase: train_kmean
+  pair_num_thred: 500
+  cluster_update_freq: 1
+  begin_clustering_epoch: 10
+  cluster_loss_alpha: 1.0
+  batch_size: 32
+
+  dbscan:
+    eps: 0.05
+    min_sample: 5
+
+  floor_thred: 0.20
+
+  total_epochs: 100
+  warmup_epoch: -1
+  ME_train: False
+  num_points: 8192
+
+  # Metric learning loss
+  neg_thresh: 1.4
+  pos_thresh: 0.1
+  neg_weight: 1.0
+
+  # Data augmentation
+  use_random_scale: False
+  min_scale: 0.8
+  max_scale: 1.2
+  use_random_rotation: True
+  rotation_range: 90
+
+  # Data loader configs
+  stat_freq: 10
+  positive_pair_search_voxel_size_multiplier: 0.045
+
+# Network specific configurations
+net:
+  model: PointNetPP
+  in_channel: 3
+  model_n_out: 32 #Feature dimension
+  conv1_kernel_size: 3
+  normalize_feature: True
+  dist_type: L2
+  encoder_channel: 1024
+  num_pred: 4096
+
+# Optimizer arguments
+opt:
+  optimizer: SGD
+  lr: 8e-4
+  momentum: 0.8
+  sgd_momentum: 0.9
+  sgd_dampening: 0.1
+  adam_beta1: 0.9
+  adam_beta2: 0.999
+  adam_eps: 1e-08
+  weight_decay: 1e-4
+  bn_momentum: 0.05
+  exp_gamma: 0.99
+  exp_step_size: 496 # (1 epoch * 201 iter/epoch)
+  scheduler: StepLR
+
+misc:
+  output_dir: ./output.pointclus
+  use_gpu: True
+  num_gpus: 4
+  num_workers: 2
+  weight: 
+  config: 
+  lenient_weight_loading: False # Weights with the same size will be loaded
+
+
+# Dataset specific configurations
+data:
+  dataset: ScanNetDBSCANPairPointDataset
+  proto_pool: Max # Max or Avg
+  cluster_k: 20
+  cluster_freq_epoch: 5
+  voxel_size: 1
+  dataset_root_dir: /home/longfuchen/longfuchen.49/export/home/v-fulong/data/scannet_pair.8192
+  scannet_match_dir: ./data/scannet_8192_points_data_vali.txt
+  sampler: False
+  num_sample: 8192
+  num_data: 15880
+  kmeans_n_iter: 50
+  kmean_output_path: ./output.pointclus/kmean
+  kmean_output_num: 10
+  save_proto_fea: True
+  

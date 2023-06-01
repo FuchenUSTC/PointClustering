@@ -33,10 +33,11 @@ Feature invariance under different data transformations, i.e., transformation in
 To guarantee the success of compiling SIFA cuda kernel, the nvcc cuda compiler should be installed in the environment. We have integrated the complete running environment into a docker image and will release it on DockerHub in the future.
 
 
-# Training of PointClustering
+# Pre-training of PointClustering on ScanNet
 
-Will be coming soon.
-
+```
+python -m torch.distributed.launch --nproc_per_node=4 train.py --config_file=config/pretrain/PointNetPP.pointclus.config.yml
+```
 
 # Citation
 

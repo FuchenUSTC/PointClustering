@@ -33,3 +33,28 @@ def apply_transform(pts, trans):
   T = trans[:3, 3]
   pts = pts @ R.T + T
   return pts
+
+
+# obtain distance 
+def square_distance_np(src, dst):
+    """
+    Calculate Euclid distance between each two points.
+
+    src^T * dst = xn * xm + yn * ym + zn * zm;
+    sum(src^2, dim=-1) = xn*xn + yn*yn + zn*zn;
+    sum(dst^2, dim=-1) = xm*xm + ym*ym + zm*zm;
+    dist = (xn - xm)^2 + (yn - ym)^2 + (zn - zm)^2
+         = sum(src**2,dim=-1)+sum(dst**2,dim=-1)-2*src^T*dst
+
+    Input:
+        src: source points, [N, C]
+        dst: target points, [M, C]
+    Output:
+        dist: per-point square distance, [N, M]
+    """
+    N, _ = src.shape
+    M, _ = dst.shape
+    dist = -2 * torch.matmul(src, dst.permute(1, 0))
+    dist += torch.sum(src ** 2, -1).view(N, 1)
+    dist += torch.sum(dst ** 2, -1).view(1, M)
+    return dist

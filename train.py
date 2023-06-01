@@ -2,7 +2,7 @@
 # auth: Fuchen Long
 # mail: longfc.ustc@gmail.com
 # date: 2022/01/08
-# desc: train file for dbpcl
+# desc: train file for PointClustering
 
 import open3d as o3d  # prevent loading error
 
@@ -23,7 +23,7 @@ from easydict import EasyDict as edict
 import util.multiprocessing as mpu
 from util.logger import setup_logger
 
-from dataset.dbpcl_data_loaders import make_data_loader
+from dataloader.data_loaders import make_data_loader
 from trainer import *
 
 
@@ -35,60 +35,64 @@ torch.cuda.manual_seed_all(0)
 
 
 def get_trainer(trainer):
-  if trainer == 'HardestContrastiveLossTrainer':
-    return HardestContrastiveLossTrainer
-  elif trainer == 'PointNCELossTrainer':
-    return PointNCELossTrainer
-  elif trainer == 'PointNCELossRanSacTrainer':
-    return PointNCELossRanSacTrainer
-  elif trainer == 'PointNCEClusterTrainer':
-    return PointNCEClusterTrainer
-  elif trainer == 'PointClusterSegTrainer':
-    return PointClusterSegTrainer
-  elif trainer == 'PointClusterPairSegTrainer':
-    return PointClusterPairSegTrainer
-  elif trainer == 'PointClusterPairAugCropSegTrainer':
-    return PointClusterPairAugCropSegTrainer
-  elif trainer == 'PointClusterPairDBSCANTrainer':
-    return PointClusterPairDBSCANTrainer
-  elif trainer == 'PointProtoDBSCANTrainer':
-    return PointProtoDBSCANTrainer
-  elif trainer == 'PointProtoCoDBSCANTrainer':
-    return PointProtoCoDBSCANTrainer
-  elif trainer == 'PointProtoCoDBSCANTrainerV2':
-    return PointProtoCoDBSCANTrainerV2
-  elif trainer == 'PointProtoCoDBSCANCrossTrainer':
-    return PointProtoCoDBSCANCrossTrainer
-  elif trainer == 'PointClusteringTrainer':
+  if trainer == 'PointClusteringTrainer':
     return PointClusteringTrainer
-  elif trainer == 'VoxelProtoCoDBSCANTrainer':
-    return VoxelProtoCoDBSCANTrainer
-  elif trainer == 'VoxelProtoCoDBSCANCrossTrainer':
-    return VoxelProtoCoDBSCANCrossTrainer
-  elif trainer == 'PointInsNCETrainer':
-    return PointInsNCETrainer
-  elif trainer == 'SoftmaxLossTrainer':
-    return SoftmaxLossTrainer
-  elif trainer == 'LinearSVMTrainer':
-    return LinearSVMTrainer
-  elif trainer == 'MultiShapeCrossEntropyLossTrainer':
-    return MultiShapeCrossEntropyLossTrainer
-  elif trainer == 'MaskedCrossEntropyLossTrainer':
-    return MaskedCrossEntropyLossTrainer
-  elif trainer == 'WeightedCrossEntropyLossTrainer':
-    return WeightedCrossEntropyLossTrainer
-  elif trainer == 'VoxelCrossEntropyLossTrainer':
-    return VoxelCrossEntropyLossTrainer
-  elif trainer == 'ChamferDistanceLossTrainer':
-    return ChamferDistanceLossTrainer
-  elif trainer == 'ChamferDistanceLossUE4Trainer':
-    return ChamferDistanceLossUE4Trainer
-  elif trainer == 'ChamferDistanceLossShapeNet55Trainer':
-    return ChamferDistanceLossShapeNet55Trainer
-  elif trainer == 'ChamferDistanceRawPointsCompletor':
-    return ChamferDistanceRawPointsCompletor
   else:
     raise ValueError(f'Trainer {trainer} not found')
+  
+  
+  # ---- Not included ---- 
+  #elif trainer == 'HardestContrastiveLossTrainer':
+  #  return HardestContrastiveLossTrainer
+  #elif trainer == 'PointNCELossTrainer':
+  #  return PointNCELossTrainer
+  #elif trainer == 'PointNCELossRanSacTrainer':
+  #  return PointNCELossRanSacTrainer
+  #elif trainer == 'PointNCEClusterTrainer':
+  #  return PointNCEClusterTrainer
+  #elif trainer == 'PointClusterSegTrainer':
+  #  return PointClusterSegTrainer
+  #elif trainer == 'PointClusterPairSegTrainer':
+  #  return PointClusterPairSegTrainer
+  #elif trainer == 'PointClusterPairAugCropSegTrainer':
+  #  return PointClusterPairAugCropSegTrainer
+  #elif trainer == 'PointClusterPairDBSCANTrainer':
+  #  return PointClusterPairDBSCANTrainer
+  #elif trainer == 'PointProtoDBSCANTrainer':
+  #  return PointProtoDBSCANTrainer
+  #elif trainer == 'PointProtoCoDBSCANTrainer':
+  #  return PointProtoCoDBSCANTrainer
+  #elif trainer == 'PointProtoCoDBSCANTrainerV2':
+  #  return PointProtoCoDBSCANTrainerV2
+  #elif trainer == 'PointProtoCoDBSCANCrossTrainer':
+  #  return PointProtoCoDBSCANCrossTrainer
+  #elif trainer == 'VoxelProtoCoDBSCANTrainer':
+  #  return VoxelProtoCoDBSCANTrainer
+  #elif trainer == 'VoxelProtoCoDBSCANCrossTrainer':
+  #  return VoxelProtoCoDBSCANCrossTrainer
+  #elif trainer == 'PointInsNCETrainer':
+  #  return PointInsNCETrainer
+  #elif trainer == 'SoftmaxLossTrainer':
+  #  return SoftmaxLossTrainer
+  #elif trainer == 'LinearSVMTrainer':
+  #  return LinearSVMTrainer
+  #elif trainer == 'MultiShapeCrossEntropyLossTrainer':
+  #  return MultiShapeCrossEntropyLossTrainer
+  #elif trainer == 'MaskedCrossEntropyLossTrainer':
+  #  return MaskedCrossEntropyLossTrainer
+  #elif trainer == 'WeightedCrossEntropyLossTrainer':
+  #  return WeightedCrossEntropyLossTrainer
+  #elif trainer == 'VoxelCrossEntropyLossTrainer':
+  #  return VoxelCrossEntropyLossTrainer
+  #elif trainer == 'ChamferDistanceLossTrainer':
+  #  return ChamferDistanceLossTrainer
+  #elif trainer == 'ChamferDistanceLossUE4Trainer':
+  #  return ChamferDistanceLossUE4Trainer
+  #elif trainer == 'ChamferDistanceLossShapeNet55Trainer':
+  #  return ChamferDistanceLossShapeNet55Trainer
+  #elif trainer == 'ChamferDistanceRawPointsCompletor':
+  #  return ChamferDistanceRawPointsCompletor
+
 
 
 def parse_option():
